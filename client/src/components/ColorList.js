@@ -33,6 +33,15 @@ const ColorList = ({ colors, updateColors, handleUpdate }) => {
 
   const deleteColor = (color) => {
     // make a delete request to delete this color
+    axiosWithAuth()
+      .delete(`http://localhost:5000/api/colors/${color.id}`)
+      .then((res) => {
+        console.log(res);
+        handleUpdate(res);
+      })
+      .catch((err) => {
+        console.log("you cannot change the rainbow ->', err);
+      });
   };
 
   return (
