@@ -40,7 +40,7 @@ const ColorList = ({ colors, updateColors, handleUpdate }) => {
         handleUpdate(res);
       })
       .catch((err) => {
-        console.log("you cannot change the rainbow ->', err);
+        console.log("you cannot change the rainbow ->", err);
       });
   };
 
