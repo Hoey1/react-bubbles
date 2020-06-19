@@ -26,10 +26,20 @@ In this project you will create a login page and request a token from the server
 
 Demonstrate your understanding of this Sprint's concepts by answering the following free-form questions. Edit this document to include your answers after each question. Make sure to leave a blank line above and below your answer so it is clear and easy to read by your project manager.
 
-- [ ] Explain what a token is used for.
-- [ ] What steps can you take in your web apps to keep your data secure?
-- [ ] Describe how web servers work.
-- [ ] Which HTTP methods can be mapped to the CRUD acronym that we use when interfacing with APIs/Servers.
+- [✔️] Explain what a token is used for.
+
+  > A token is used for server authentication, ie: for a user logging in.
+
+- [✔️] What steps can you take in your web apps to keep your data secure?
+
+  > One way is using protected routes that check for auth before routing the user, making users login before they can go to a certain page, not storing your token in local storage
+
+- [✔️] Describe how web servers work.
+
+  > Web Servers store & share internet data. When you deploy an app you give data for your website to a web server, then it stores said data and will share it w/ other web servers so that it can be accessed across the world. When a user wants to go to your website they will use the URL which directs to the location of that page inside the server and the server returns the information.
+
+- [✔️] Which HTTP methods can be mapped to the CRUD acronym that we use when interfacing with APIs/Servers.
+  > Put, Get, Delete and Post
 
 ## Project Set Up
 
@@ -63,8 +73,11 @@ The MVP of this project will be broken up between 2 stages. Follow each step.
 Build a login form to authenticate your users.
 
 - [ ] Construct an AXIOS request to retrieve a token from the server. You'll use this token to interact with the API
+
 - [ ] Save the token to localStorage
+
 - [ ] Build a `axiosWithAuth` module to create an instance of axios with the authentication header
+
 - [ ] Build a `PrivateRoute` component and use it to protect a route that renders the `BubblesPage` component
 
 ### Stage 2 - Consuming the API
