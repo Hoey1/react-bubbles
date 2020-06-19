@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { axiosWithAuth } from "../utils/axiosWithAuth";
+import { v4 as uuid } from "uuid";
 
 const initialColor = {
   color: "",
@@ -11,10 +12,24 @@ const ColorList = ({ colors, updateColors, handleUpdate }) => {
   console.log(colors);
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
+  const [newColor, setNewColor] = useState(initialColor);
 
   const editColor = (color) => {
     setEditing(true);
     setColorToEdit(color);
+  };
+
+  const onAdd = (event) => {
+    event.preventDefault();
+    setNewColor({ ...newColor, id: uuid() });
+    axiosWithAuth()
+      .post(`http://localhost:5000/api/colors`, newColor)
+      .then((res) => {
+        handleUpdate(res);
+      })
+      .catch((err) => {
+        console.log("youre color blind, you cannot add a color->", err);
+      });
   };
 
   const saveEdit = (e) => {
@@ -23,7 +38,7 @@ const ColorList = ({ colors, updateColors, handleUpdate }) => {
     axiosWithAuth()
       .put(`http://localhost:5000/api/colors/${colorToEdit.id}`, colorToEdit)
       .then((res) => {
-        //console.log(res);
+        console.log(res);
         handleUpdate(colorToEdit);
       })
       .catch((err) => {
@@ -100,7 +115,40 @@ const ColorList = ({ colors, updateColors, handleUpdate }) => {
         </form>
       )}
       <div className="spacer" />
-      {/* stretch - build another form here to add a color */}
+
+      <form>
+        <h2>Add a color</h2>
+        <label>
+          Colorname
+          <br />
+          <input
+            placeholder="solid purple"
+            type="text"
+            name="color"
+            onChange={(e) => {
+              setNewColor({ ...newColor, color: e.target.value });
+              console.log(newColor);
+            }}
+          />
+        </label>
+        <br />
+        <label>
+          Hexcode
+          <br />
+          <input
+            placeholder="#660c6e"
+            type="text"
+            name="hex"
+            onChange={(e) =>
+              setNewColor({
+                ...newColor,
+                code: { hex: e.target.value },
+              })
+            }
+          />
+        </label>
+        <button onClick={onAdd}>Add!</button>
+      </form>
     </div>
   );
 };
