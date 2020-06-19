@@ -9,6 +9,7 @@ import ColorList from "./ColorList";
 const BubblePage = () => {
   const match = useRouteMatch("/bubbles-page");
   const [colorList, setColorList] = useState([]);
+  const [update, handleUpdate] = useState([]);
 
   useEffect(() => {
     axiosWithAuth()
@@ -20,11 +21,15 @@ const BubblePage = () => {
       .catch((err) => {
         console.log("sorry, you are color blind", err);
       });
-  }, []);
+  }, [update]);
 
   return (
     <>
-      <ColorList colors={colorList} updateColors={setColorList} />
+      <ColorList
+        colors={colorList}
+        updateColors={setColorList}
+        handleUpdate={handleUpdate}
+      />
       <Bubbles colors={colorList} />
     </>
   );
