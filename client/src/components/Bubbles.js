@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Pack } from "@potion/layout";
 import { Svg, Circle } from "@potion/element";
+// import { LinearGradient } from '@potion/extra';
 
 const Bubbles = ({ colors }) => {
   const [bubbleData, setBubbleData] = useState([]);
   useEffect(() => {
     const generateBubbleData = colors.map((_, i) => ({
       value: Math.floor(Math.random() * (colors.length * 2)) + 1,
-      key: `${i + 1}`
+      key: `${i + 1}`,
     }));
     setBubbleData(generateBubbleData);
   }, [colors]);
@@ -15,18 +16,18 @@ const Bubbles = ({ colors }) => {
   return (
     <div className="bubble-wrap">
       <p>bubbles</p>
-      <Svg width={400} height={400}>
+      <Svg width={600} height={600}>
         <Pack
           data={{
-            children: bubbleData
+            children: bubbleData,
           }}
-          sum={datum => datum.value}
-          size={[400, 400]}
+          sum={(datum) => datum.value}
+          size={[600, 600]}
           includeRoot={false}
-          nodeEnter={d => ({ ...d, r: 0 })}
+          nodeEnter={(d) => ({ ...d, r: 0 })}
           animate
         >
-          {nodes =>
+          {(nodes) =>
             nodes
               .map(({ x, y, r, key }, i) => {
                 if (i < colors.length) {
@@ -42,7 +43,7 @@ const Bubbles = ({ colors }) => {
                 }
                 return null;
               })
-              .filter(v => v)
+              .filter((v) => v)
           }
         </Pack>
       </Svg>
