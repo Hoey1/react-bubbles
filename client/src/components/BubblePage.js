@@ -19,7 +19,7 @@ const BubblePage = () => {
         setColorList(res.data);
       })
       .catch((err) => {
-        console.log("sorry, you are color blind", err);
+        console.log("sorry, you are 🌈🦮", err);
       });
   }, [update]);
 

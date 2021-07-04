@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import { axiosWithAuth } from "../utils/axiosWithAuth";
-import { v4 as uuid } from "uuid";
+import "../styles.scss";
+// import { v4 as uuid } from "uuid";
 
 const initialColor = {
   color: "",
   code: { hex: "" },
 };
 
-const ColorList = ({ colors, updateColors, handleUpdate }) => {
+const ColorList = ({ colors, updateColors }) => {
   console.log(colors);
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
@@ -19,44 +20,72 @@ const ColorList = ({ colors, updateColors, handleUpdate }) => {
     setColorToEdit(color);
   };
 
-  const onAdd = (event) => {
-    event.preventDefault();
-    setNewColor({ ...newColor, id: uuid() });
-    axiosWithAuth()
-      .post(`http://localhost:5000/api/colors`, newColor)
-      .then((res) => {
-        handleUpdate(res);
-      })
-      .catch((err) => {
-        console.log("youre color blind, you cannot add a color->", err);
-      });
-  };
-
   const saveEdit = (e) => {
     e.preventDefault();
 
+    console.log(colorToEdit);
+
     axiosWithAuth()
-      .put(`http://localhost:5000/api/colors/${colorToEdit.id}`, colorToEdit)
+      .put(`/api/colors/${colorToEdit.id}`, colorToEdit)
       .then((res) => {
-        console.log(res);
-        handleUpdate(colorToEdit);
-      })
-      .catch((err) => {
-        console.log("there was a problem with that color -->", err);
+        axiosWithAuth()
+          .get("/api/colors")
+          .then((res) => {
+            updateColors(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       });
   };
 
   const deleteColor = (color) => {
     // make a delete request to delete this color
     axiosWithAuth()
-      .delete(`http://localhost:5000/api/colors/${color.id}`)
+      .delete(`/api/colors/${color.id}`)
       .then((res) => {
-        console.log(res);
-        handleUpdate(res);
+        axiosWithAuth()
+          .get("/api/colors")
+          .then((res) => {
+            updateColors(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((err) => {
-        console.log("you cannot change the rainbow ->", err);
+        console.log(err);
       });
+  };
+
+  const addColor = (e) => {
+    e.preventDefault();
+
+    axiosWithAuth()
+      .post("/api/colors", newColor)
+      .then((res) => {
+        setNewColor(initialColor);
+
+        axiosWithAuth()
+          .get("/api/colors")
+          .then((res) => {
+            updateColors(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleColor = (e) => {
+    if (e.target.name !== "hex") {
+      setNewColor({ ...newColor, [e.target.name]: e.target.value });
+    } else {
+      setNewColor({ ...newColor, code: { hex: e.target.value } });
+    }
   };
 
   return (
@@ -114,40 +143,29 @@ const ColorList = ({ colors, updateColors, handleUpdate }) => {
           </div>
         </form>
       )}
+
       <div className="spacer" />
 
+      {/* stretch - build another form here to add a color */}
       <form>
-        <h2>Add a color</h2>
-        <label>
-          Colorname
-          <br />
+        <div className="add-color">
+          <p>Add a Color</p>
           <input
-            placeholder="solid purple"
+            onChange={handleColor}
+            placeholder="...color name"
             type="text"
             name="color"
-            onChange={(e) => {
-              setNewColor({ ...newColor, color: e.target.value });
-              console.log(newColor);
-            }}
+            value={newColor.color}
           />
-        </label>
-        <br />
-        <label>
-          Hexcode
-          <br />
           <input
-            placeholder="#660c6e"
+            onChange={handleColor}
+            placeholder="...hex"
             type="text"
             name="hex"
-            onChange={(e) =>
-              setNewColor({
-                ...newColor,
-                code: { hex: e.target.value },
-              })
-            }
+            value={newColor.code.hex}
           />
-        </label>
-        <button onClick={onAdd}>Add!</button>
+          <button onClick={addColor}>Add Color</button>
+        </div>
       </form>
     </div>
   );

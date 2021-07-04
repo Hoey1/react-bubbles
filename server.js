@@ -13,90 +13,125 @@ let colors = [
   {
     color: "aliceblue",
     code: {
-      hex: "#f0f8ff"
+      hex: "#f0f8ff",
     },
-    id: 1
+    id: 1,
   },
   {
     color: "limegreen",
     code: {
-      hex: "#99ddbc"
+      hex: "#99ddbc",
     },
-    id: 2
+    id: 2,
   },
   {
     color: "aqua",
     code: {
-      hex: "#00ffff"
+      hex: "#00ffff",
     },
-    id: 3
+    id: 3,
   },
   {
     color: "aquamarine",
     code: {
-      hex: "#7fffd4"
+      hex: "#7fffd4",
     },
-    id: 4
+    id: 4,
   },
   {
     color: "lilac",
     code: {
-      hex: "#9a99dd"
+      hex: "#9a99dd",
     },
-    id: 5
+    id: 5,
   },
   {
     color: "softpink",
     code: {
-      hex: "#dd99ba"
+      hex: "#dd99ba",
     },
-    id: 6
+    id: 6,
   },
   {
     color: "bisque",
     code: {
-      hex: "#dd9a99"
+      hex: "#dd9a99",
     },
-    id: 7
+    id: 7,
   },
   {
     color: "softyellow",
     code: {
-      hex: "#dcdd99"
+      hex: "#dcdd99",
     },
-    id: 8
+    id: 8,
   },
   {
     color: "blanchedalmond",
     code: {
-      hex: "#ffebcd"
+      hex: "#ffebcd",
     },
-    id: 9
+    id: 9,
   },
   {
     color: "blue",
     code: {
-      hex: "#6093ca"
+      hex: "#6093ca",
     },
-    id: 10
+    id: 10,
   },
   {
     color: "blueviolet",
     code: {
-      hex: "#8a2be2"
+      hex: "#8a2be2",
     },
-    id: 11
-  }
+    id: 11,
+  },
+  {
+    color: "deeppink",
+    code: {
+      hex: "#ff1493",
+    },
+    id: 12,
+  },
+  {
+    color: "tomato",
+    code: {
+      hex: "#ff6347",
+    },
+    id: 13,
+  },
+  {
+    color: "orange",
+    code: {
+      hex: "#FFA500",
+    },
+    id: 14,
+  },
+  {
+    color: "magenta",
+    code: {
+      hex: "#FF00FF",
+    },
+    id: 15,
+  },
+  {
+    color: "indigo",
+    code: {
+      hex: "#4B0082",
+    },
+    id: 16,
+  },
 ];
 
-let nextId = 12;
+let nextId = 17;
 
 function authenticator(req, res, next) {
   const { authorization } = req.headers;
   if (authorization === token) {
     next();
   } else {
-    res.status(403).json({ error: "User must be logged in to do that." });
+    res.status(403).json({ error: "✋🏼 User must be logged in to do that ✋🏼" });
   }
 }
 
@@ -106,13 +141,13 @@ app.post("/api/login", (req, res) => {
     req.loggedIn = true;
     setTimeout(() => {
       res.status(200).json({
-        payload: token
+        payload: token,
       });
     }, 1000);
   } else {
-    res
-      .status(403)
-      .json({ error: "Username or Password incorrect. Please see Readme" });
+    res.status(403).json({
+      error: "✋🏼Username or Password incorrect. Please see Readme ✋🏼",
+    });
   }
 });
 
@@ -138,7 +173,7 @@ app.put("/api/colors/:id", authenticator, (req, res) => {
       .status(422)
       .send("Make sure your request body has all the fields it needs");
   }
-  colors = colors.map(color => {
+  colors = colors.map((color) => {
     if (`${color.id}` === req.params.id) {
       return req.body;
     }
@@ -150,14 +185,14 @@ app.put("/api/colors/:id", authenticator, (req, res) => {
 app.delete("/api/colors/:id", authenticator, (req, res) => {
   if (!req.params.id)
     res.status(400).send("Your request is missing the color id");
-  colors = colors.filter(color => `${color.id}` !== req.params.id);
+  colors = colors.filter((color) => `${color.id}` !== req.params.id);
   res.status(202).send(req.params.id);
 });
 
-app.get("/", function(req, res) {
-  res.send("App is working 👍");
+app.get("/", function (req, res) {
+  res.send("App is working 🎉");
 });
 
 app.listen(5000, () => {
-  console.log("Server listening on port 5000");
+  console.log("🎧 Server 🦻🏼 on port 5000 🎧");
 });
